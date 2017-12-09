@@ -1,0 +1,13 @@
+package cn.edu.hit.weibo.dao;
+
+import cn.edu.hit.weibo.model.Log;
+
+import java.sql.Timestamp;
+
+public class LogDao {
+    private Dao<Log> dao = new Dao<>();
+    public boolean addLog(Log log){
+        String sql = "insert into log (bid, message, time) value (?, ?, ?)";
+        return dao.updateT(sql,log.getBid(),log.getMessage(),new Timestamp(System.currentTimeMillis()));
+    }
+}
