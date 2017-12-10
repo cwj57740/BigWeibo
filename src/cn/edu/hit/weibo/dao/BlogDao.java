@@ -32,4 +32,12 @@ public class BlogDao {
         return dao.getTListByParams(sql,index,num);
     }
 
+    public List<Blog> getHotBlogList(){
+        String sql = "select * from blog where bid in " +
+                "(select top 100 bid from blog where uid in " +
+                "(select top 100 uid from user order by hits desc) " +
+                "order by datetime desc) order by datetime desc";
+        return dao.getTListByParams(sql);
+    }
+
 }
