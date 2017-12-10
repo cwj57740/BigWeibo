@@ -26,7 +26,7 @@ public class Cache implements Observer{
     @Override
     public void update(Observable o, Object arg) {
         if(o.hasChanged()){
-            Blog blog = ((WeiboService) o).getBlog();
+            Blog blog = weiboService.getBlog();
             if(Update.equals(arg)){
                 blogRedis.updateSingle(blog.getBid());
             }
