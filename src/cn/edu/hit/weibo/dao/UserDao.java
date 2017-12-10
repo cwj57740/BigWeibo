@@ -21,7 +21,7 @@ public class UserDao {
      * @return the boolean
      */
     public boolean addUser(User user){
-        String sql = "insert into user (username, password) value (?, ?)";
+        String sql = "insert into user (username, password) values (?, ?)";
         return dao.updateT(sql,user.getUsername(),user.getPassword());
     }
 

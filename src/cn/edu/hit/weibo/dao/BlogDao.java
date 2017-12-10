@@ -1,6 +1,7 @@
 package cn.edu.hit.weibo.dao;
 
 import cn.edu.hit.weibo.model.Blog;
+import cn.edu.hit.weibo.model.User;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
 public class BlogDao {
     private Dao<Blog> dao = new Dao<>();
     public boolean addBlog(Blog blog){
-        String sql = "insert into blog (uid, title, text, datetime) value (?, ?, ?, ?)";
+        String sql = "insert into blog (uid, title, text, datetime) values (?, ?, ?, ?)";
         return dao.updateT(sql,blog.getUid(),blog.getTitle(),blog.getText(),new Timestamp(System.currentTimeMillis()));
     }
     public boolean updateBlog(Blog blog){
@@ -38,6 +39,10 @@ public class BlogDao {
                 "(select top 100 uid from user order by hits desc) " +
                 "order by datetime desc) order by datetime desc";
         return dao.getTListByParams(sql);
+    }
+    public List<Blog> getBlogListByUser(User user, int index , int num){
+        String sql = "select * from blog where uid = ? order by datetime desc limit ?, ?";
+        return dao.getTListByParams(sql,user.getUid(),index,num);
     }
 
 }

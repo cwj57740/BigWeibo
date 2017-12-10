@@ -2,6 +2,7 @@ package cn.edu.hit.weibo.service;
 
 import cn.edu.hit.weibo.dao.BlogDao;
 import cn.edu.hit.weibo.model.Blog;
+import cn.edu.hit.weibo.model.User;
 import cn.edu.hit.weibo.redis.BlogRedis;
 
 import java.util.List;
@@ -68,15 +69,24 @@ public class WeiboService extends Observable {
         return b;
     }
 
-    public boolean deleteBlog(Blog blog){
-        boolean b = blogDao.deleteBlog(blog);
-        this.setChanged();
-        this.notifyObservers(event.Delete);
-        return b;
+    public boolean deleteBlog(int bid){
+        blog = blogDao.getBlogById(bid);
+        if(blog!=null){
+            boolean b = blogDao.deleteBlog(blog);
+            this.setChanged();
+            this.notifyObservers(event.Delete);
+            return b;
+        }
+        return false;
     }
 
     public List<Blog> getAllBlogList(int index, int num){
         return blogDao.getBlogList(index,num);
     }
+
+    public List<Blog> getUserBlogList(User user,int index,int num){
+        return blogDao.getBlogListByUser(user,index,num);
+    }
+
 
 }
