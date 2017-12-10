@@ -4,6 +4,7 @@ import cn.edu.hit.weibo.dao.BlogDao;
 import cn.edu.hit.weibo.model.Blog;
 import cn.edu.hit.weibo.redis.BlogRedis;
 
+import java.util.List;
 import java.util.Observable;
 
 
@@ -72,6 +73,10 @@ public class WeiboService extends Observable {
         this.setChanged();
         this.notifyObservers(event.Delete);
         return b;
+    }
+
+    public List<Blog> getAllBlogList(int index, int num){
+        return blogDao.getBlogList(index,num);
     }
 
 }
