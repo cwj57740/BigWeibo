@@ -15,7 +15,6 @@ public class BlogRedis {
 
     private Jedis jedis;//非切片额客户端连接
     private JedisPool jedisPool;//非切片连接池
-    private BlogDao blogDao = new BlogDao();
 
     public BlogRedis(){
         initialPool();
@@ -152,11 +151,10 @@ public class BlogRedis {
     }
 
     //更新微博单条记录
-    public void updateSingle(int bid){
+    public void updateSingle(Blog blog){
         Map<String, String> blogmap = new HashMap<String, String>();
         try{
             jedis=jedisPool.getResource(); // 获取连接
-            Blog blog = blogDao.getBlogById(bid);
 
             jedis.del(Integer.toString(blog.getBid()));//删除原有键
             //重新设置键值
@@ -183,11 +181,10 @@ public class BlogRedis {
     }
 
     //删除微博单条记录
-    public void deleteSingle(int bid){
+    public void deleteSingle(Blog blog){
         Map<String, String> blogmap = new HashMap<String, String>();
         try{
             jedis=jedisPool.getResource(); // 获取连接
-            Blog blog = blogDao.getBlogById(bid);
 
             jedis.del(Integer.toString(blog.getBid()));//删除原有键
 

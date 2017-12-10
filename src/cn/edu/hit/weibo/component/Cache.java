@@ -15,7 +15,6 @@ import static cn.edu.hit.weibo.service.WeiboService.event.Update;
 public class Cache implements Observer{
     private WeiboService weiboService = new WeiboService();
     private BlogRedis blogRedis = new BlogRedis();
-    private BlogDao blogDao = new BlogDao();
     private List<Blog> blogList;
     Cache(Observable o){
         o.addObserver(this);
@@ -28,10 +27,10 @@ public class Cache implements Observer{
         if(o.hasChanged()){
             Blog blog = weiboService.getBlog();
             if(Update.equals(arg)){
-                blogRedis.updateSingle(blog.getBid());
+                blogRedis.updateSingle(blog);
             }
             if(Delete.equals(arg)){
-                blogRedis.deleteSingle(blog.getBid());
+                blogRedis.deleteSingle(blog);
             }
         }
 
