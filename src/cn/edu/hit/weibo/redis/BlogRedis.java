@@ -71,9 +71,9 @@ public class BlogRedis {
             jedis=jedisPool.getResource(); // 获取连接
             List<String> rsmap = jedis.hmget(Integer.toString(bid), "uid","title","text","views","isDeleted","datetime");
             if(rsmap != null){
-                return false;
-            }else {
                 return true;
+            }else {
+                return false;
             }
         }catch(Exception e){
             e.printStackTrace();

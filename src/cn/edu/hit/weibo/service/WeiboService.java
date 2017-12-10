@@ -2,6 +2,7 @@ package cn.edu.hit.weibo.service;
 
 import cn.edu.hit.weibo.dao.BlogDao;
 import cn.edu.hit.weibo.model.Blog;
+import cn.edu.hit.weibo.redis.BlogRedis;
 
 import java.util.Observable;
 
@@ -30,6 +31,7 @@ public class WeiboService extends Observable {
     }
     private Blog blog;
     private BlogDao blogDao = new BlogDao();
+    private BlogRedis blogRedis = new BlogRedis();
 
     public Blog getBlog() {
         return blog;
@@ -47,7 +49,13 @@ public class WeiboService extends Observable {
     }
 
     public Blog readBlog(int bid){
-        blog = blogDao.getBlogById(bid);
+        //判断缓存中是否有该条微博，如果有，则从缓存中取，如果没有，则从数据库中取
+        if(blogRedis.isExist(bid)){
+            blog = blogRedis.getBlogBybid(bid);
+        }else {
+            blog = blogDao.getBlogById(bid);
+        }
+
         this.setChanged();
         this.notifyObservers(event.Read);
         return blog;
