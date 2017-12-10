@@ -50,9 +50,8 @@ public class WeiboService extends Observable {
 
     public Blog readBlog(int bid){
         //判断缓存中是否有该条微博，如果有，则从缓存中取，如果没有，则从数据库中取
-        if(blogRedis.isExist(bid)){
-            blog = blogRedis.getBlogBybid(bid);
-        }else {
+        blog = blogRedis.getBlogBybid(bid);
+        if(blog == null){
             blog = blogDao.getBlogById(bid);
         }
 

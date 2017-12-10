@@ -1,5 +1,6 @@
 package cn.edu.hit.weibo.redis;
 
+import cn.edu.hit.weibo.dao.BlogDao;
 import cn.edu.hit.weibo.model.Blog;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -14,6 +15,7 @@ public class BlogRedis {
 
     private Jedis jedis;//非切片额客户端连接
     private JedisPool jedisPool;//非切片连接池
+    private BlogDao blogDao = new BlogDao();
 
     public BlogRedis(){
         initialPool();
@@ -84,8 +86,8 @@ public class BlogRedis {
             if(jedisPool!=null){
                 jedisPool.close();
             }
-            return false;
         }
+        return false;
     }
 
     //从缓存中获取微博信息
@@ -113,8 +115,8 @@ public class BlogRedis {
             if(jedisPool!=null){
                 jedisPool.close();
             }
-            return null;
         }
+        return null;
     }
 
     //更新缓存
@@ -148,4 +150,57 @@ public class BlogRedis {
             }
         }
     }
+
+    //更新微博单条记录
+    public void updateSingle(int bid){
+        Map<String, String> blogmap = new HashMap<String, String>();
+        try{
+            jedis=jedisPool.getResource(); // 获取连接
+            Blog blog = blogDao.getBlogById(bid);
+
+            jedis.del(Integer.toString(blog.getBid()));//删除原有键
+            //重新设置键值
+            long dt = blog.getDatetime().getTime();
+
+            blogmap.put("uid",Integer.toString(blog.getUid()));
+            blogmap.put("title",blog.getTitle());
+            blogmap.put("text",blog.getText());
+            blogmap.put("views",Integer.toString(blog.getViews()));
+            blogmap.put("isDeleted",Integer.toString(blog.getIsDeleted()));
+            blogmap.put("datetime",Long.toString(dt));
+            jedis.hmset(Integer.toString(blog.getBid()), blogmap);// 设置值
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            if(jedis!=null){
+                jedis.close();
+            }
+            if(jedisPool!=null){
+                jedisPool.close();
+            }
+        }
+    }
+
+    //删除微博单条记录
+    public void deleteSingle(int bid){
+        Map<String, String> blogmap = new HashMap<String, String>();
+        try{
+            jedis=jedisPool.getResource(); // 获取连接
+            Blog blog = blogDao.getBlogById(bid);
+
+            jedis.del(Integer.toString(blog.getBid()));//删除原有键
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            if(jedis!=null){
+                jedis.close();
+            }
+            if(jedisPool!=null){
+                jedisPool.close();
+            }
+        }
+    }
+
 }
