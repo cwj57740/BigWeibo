@@ -1,4 +1,6 @@
 package cn.edu.hit.weibo.activemq;
+import cn.edu.hit.weibo.dao.LogDao;
+import cn.edu.hit.weibo.model.Log;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
@@ -7,6 +9,7 @@ import javax.jms.*;
 public class Consumer {
 
     private static final String QUEUE_NAME = "First Queue";
+    private static LogDao logDao = new LogDao();
 
     public static void main(String[] args) {
         receiveMessage();
@@ -19,7 +22,10 @@ public class Consumer {
      * @return void    返回类型
      */
     private static void operation(String message) {
-        // System.out.println(message);
+        Log log = new Log();
+        log.setBid(Integer.parseInt(message.split(".")[0]));
+        log.setMessage(message.split(".")[1]);
+        logDao.addLog(log);
     }
 
     /**
