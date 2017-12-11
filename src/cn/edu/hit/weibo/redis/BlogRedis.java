@@ -90,20 +90,22 @@ public class BlogRedis {
 
     //从缓存中获取微博信息
     public Blog getBlogBybid(int bid){
-        Blog blog = new Blog();
         try{
             jedis=jedisPool.getResource(); // 获取连接
             List<String> rsmap = jedis.hmget(Integer.toString(bid), "uid","title","text","views","isDeleted","datetime");
-            Long dt = Long.parseLong(rsmap.get(5));
-            Date time = new Date(dt);
-            blog.setBid(bid);
-            blog.setUid(Integer.parseInt(rsmap.get(0)));
-            blog.setTitle(rsmap.get(1));
-            blog.setText(rsmap.get(2));
-            blog.setViews(Integer.parseInt(rsmap.get(3)));
-            blog.setIsDeleted(Integer.parseInt(rsmap.get(4)));
-            blog.setDatetime(time);
-            return blog;
+            if(rsmap.isEmpty()){
+                Blog blog = new Blog();
+                Long dt = Long.parseLong(rsmap.get(5));
+                Date time = new Date(dt);
+                blog.setBid(bid);
+                blog.setUid(Integer.parseInt(rsmap.get(0)));
+                blog.setTitle(rsmap.get(1));
+                blog.setText(rsmap.get(2));
+                blog.setViews(Integer.parseInt(rsmap.get(3)));
+                blog.setIsDeleted(Integer.parseInt(rsmap.get(4)));
+                blog.setDatetime(time);
+                return blog;
+            }
         }catch(Exception e){
             e.printStackTrace();
         }finally{

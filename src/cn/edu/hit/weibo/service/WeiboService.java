@@ -5,6 +5,7 @@ import cn.edu.hit.weibo.model.Blog;
 import cn.edu.hit.weibo.model.User;
 import cn.edu.hit.weibo.redis.BlogRedis;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Observable;
 
@@ -51,10 +52,24 @@ public class WeiboService extends Observable {
     }
 
     public Blog readBlog(int bid){
+        // 开始时间
+        Long begin = new Date().getTime();
         //判断缓存中是否有该条微博，如果有，则从缓存中取，如果没有，则从数据库中取
         blog = blogRedis.getBlogBybid(bid);
+        // 结束时间
+        Long end = new Date().getTime();
+
         if(blog == null){
+            // 开始时间
+            begin = new Date().getTime();
             blog = blogDao.getBlogById(bid);
+            // 结束时间
+            end = new Date().getTime();
+            // 耗时读取
+            System.out.println("数据库读取微博花费时间 : " + (end - begin)  + " ms");
+        } else {
+            // 耗时读取
+            System.out.println("缓存读取微博花费时间 : " + (end - begin)  + " ms");
         }
 
         this.setChanged();

@@ -3,7 +3,7 @@
     <!-- 这是默认配置信息 -->
     <default-config>
         <!-- 连接四大参数配置 -->
-        <property name="jdbcUrl">jdbc:mysql://localhost:3306/bigweibo?serverTimezone=Hongkong</property>
+        <property name="jdbcUrl">jdbc:mysql://localhost:8066/TESTDB?serverTimezone=Hongkong</property>
         <property name="driverClass">com.mysql.jdbc.Driver</property>
         <property name="user">root</property>
         <property name="password">root</property>

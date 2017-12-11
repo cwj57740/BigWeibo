@@ -4,6 +4,7 @@ import cn.edu.hit.weibo.model.Blog;
 import cn.edu.hit.weibo.model.User;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BlogDao {
@@ -34,8 +35,15 @@ public class BlogDao {
     }
 
     public List<Blog> getHotBlogList(){
-        String sql = "select * from blog";
-        return dao.getTListByParams(sql);
+        List<Blog> blogList = new ArrayList<>();
+        String userSql = "select * from user order by hits limit 100";
+        List<User> userList = new Dao<User>(User.class).getTListByParams(userSql);
+        for(User user:userList){
+            String sql = "select * from blog where uid = ? order by datetime limit 100";
+            List<Blog> blogListByUser= dao.getTListByParams(sql, user.getUid());
+            blogList.addAll(blogListByUser);
+        }
+        return blogList;
     }
     public List<Blog> getBlogListByUser(User user, int index , int num){
         String sql = "select * from blog where uid = ? order by datetime desc limit ?, ?";

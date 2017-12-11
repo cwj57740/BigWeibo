@@ -77,6 +77,10 @@ public class Weibo {
 
     }
 
+    public void getHotWeibo(){
+
+    }
+
     //打印微博列表
     private void printWeiboList(List<Blog> blogList){
         System.out.println("主键    标题    点击量    创建时间");
