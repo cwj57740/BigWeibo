@@ -1,5 +1,7 @@
 package cn.edu.hit.weibo.client;
 
+import cn.edu.hit.weibo.component.Counter;
+import cn.edu.hit.weibo.component.Logger;
 import cn.edu.hit.weibo.model.Blog;
 import cn.edu.hit.weibo.model.User;
 import cn.edu.hit.weibo.service.WeiboService;
@@ -11,6 +13,8 @@ import java.util.Scanner;
 
 public class Weibo {
     private WeiboService weiboService = new WeiboService();
+    private Logger logger = new Logger(weiboService);
+    private Counter counter = new Counter(weiboService);
 
     //添加微博
     public void addWeibo(User user){
@@ -49,7 +53,7 @@ public class Weibo {
     public void getWeibolist(User user){
         Scanner scanner = new Scanner(System.in);
         System.out.println("请输入微博的起始序号：");
-        int index = scanner.nextInt();
+        int index = scanner.nextInt()-1;
         System.out.println("请输入要显示的条数：");
         int num = scanner.nextInt();
         List<Blog> blogList = weiboService.getUserBlogList(user,index,num);
@@ -62,14 +66,14 @@ public class Weibo {
         String flag = null;
         do {
             System.out.println("请输入微博的起始序号：");
-            int index = scanner.nextInt();
+            int index = scanner.nextInt()-1;
             System.out.println("请输入要显示的条数：");
             int num = scanner.nextInt();
             List<Blog> blogList = weiboService.getAllBlogList(index,num);
             printWeiboList(blogList);
             System.out.println("是否进行下一轮查询？y/n");
             flag = scanner.next();
-        }while (flag.equals('y') || flag.equals('Y'));
+        }while (flag.equals("y") || flag.equals("Y"));
 
     }
 
@@ -81,6 +85,7 @@ public class Weibo {
             Blog blog = blogList.get(i);
             Date date = blog.getDatetime();
             String datetime = sdf.format(date);
+            int isDeleted = blog.getIsDeleted();
             System.out.println(blog.getBid()+"    "+blog.getTitle()+"    "+blog.getViews()+"    "+datetime);
         }
     }
@@ -88,16 +93,22 @@ public class Weibo {
     //显示单条微博内容
     public void showSingleWeibo(){
         Scanner scanner = new Scanner(System.in);
-        System.out.println("请输入要查看的微博的主键");
+        System.out.println("请输入要查看的微博的主键（输入-1代表不查询）");
 
         int bid = scanner.nextInt();
-        Blog blog = weiboService.readBlog(bid);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = blog.getDatetime();
-        String datetime = sdf.format(date);
-        System.out.println("标题："+blog.getTitle());
-        System.out.println("点击量："+blog.getViews());
-        System.out.println("创建时间："+datetime);
-        System.out.println("正文："+blog.getText());
+        if (bid != -1){
+            Blog blog = weiboService.readBlog(bid);
+            if (blog == null){
+                System.out.println("该条微博不存在");
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = blog.getDatetime();
+            String datetime = sdf.format(date);
+            System.out.println("标题："+blog.getTitle());
+            System.out.println("点击量："+blog.getViews());
+            System.out.println("创建时间："+datetime);
+            System.out.println("正文："+blog.getText());
+        }
+
     }
 }

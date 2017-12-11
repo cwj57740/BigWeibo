@@ -34,11 +34,12 @@ public class Main {
             case 1:
                 weibo.getAllWeibo();
                 weibo.showSingleWeibo();
+                System.out.println("==========");
                 break;
             case 2:
                 do {
-                    System.out.println("请选择对自己的微博记录进行的操作：1.添加微博；2.删除微博；3.查看微博；4.退出");
                     weibo.getWeibolist(user);
+                    System.out.println("请选择对自己的微博记录进行的操作：1.添加微博；2.删除微博；3.查看微博；4.退出");
                     int opweibo = scanner.nextInt();
                     if (opweibo == 1){
                         weibo.addWeibo(user);
@@ -48,11 +49,15 @@ public class Main {
                         weibo.getWeibolist(user);
                     }else if (opweibo == 3){
                         weibo.showSingleWeibo();
+                        continue;
                     } else {
                         user = null;
+                        System.exit(0);
                         break;
                     }
                 }while (true);
+                break;
+            default:
                 break;
         }
 

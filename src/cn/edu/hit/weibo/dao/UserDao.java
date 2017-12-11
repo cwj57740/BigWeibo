@@ -12,7 +12,7 @@ public class UserDao {
     /**
      * The Dao.
      */
-    private Dao<User> dao = new Dao<>();
+    private Dao<User> dao = new Dao<>(User.class);
 
     /**
      * Add user boolean.
@@ -55,7 +55,7 @@ public class UserDao {
      */
     public User getUserById(int id){
         String sql = "select * from user where uid = ?";
-        return dao.getTByParams(sql,id);
+        return (User)dao.getTByParams(sql,id);
     }
 
     /**
@@ -76,6 +76,6 @@ public class UserDao {
      */
     public List<User> getAllUserList(){
         String sql = "select * from user";
-        return dao.getTListByParams(sql);
+        return (List<User>)dao.getTListByParams(sql);
     }
 }

@@ -23,8 +23,8 @@ public class Consumer {
      */
     private static void operation(String message) {
         Log log = new Log();
-        log.setBid(Integer.parseInt(message.split(".")[0]));
-        log.setMessage(message.split(".")[1]);
+        log.setBid(Integer.parseInt(message.split("\\.")[0]));
+        log.setMessage(message.split("\\.")[1]);
         logDao.addLog(log);
     }
 

@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class BlogDao {
-    private Dao<Blog> dao = new Dao<>();
+    private Dao<Blog> dao = new Dao<>(Blog.class);
     public boolean addBlog(Blog blog){
         String sql = "insert into blog (uid, title, text, datetime) values (?, ?, ?, ?)";
         return dao.updateT(sql,blog.getUid(),blog.getTitle(),blog.getText(),new Timestamp(System.currentTimeMillis()));
@@ -29,15 +29,12 @@ public class BlogDao {
         return dao.getTByParams(sql,bid);
     }
     public List<Blog> getBlogList(int index, int num){
-        String sql = "select * from blog order by datetime desc limit ?, ?";
+        String sql = "select * from blog where isDeleted = 0 order by datetime desc limit ?, ?";
         return dao.getTListByParams(sql,index,num);
     }
 
     public List<Blog> getHotBlogList(){
-        String sql = "select * from blog where bid in " +
-                "(select top 100 bid from blog where uid in " +
-                "(select top 100 uid from user order by hits desc) " +
-                "order by datetime desc) order by datetime desc";
+        String sql = "select * from blog";
         return dao.getTListByParams(sql);
     }
     public List<Blog> getBlogListByUser(User user, int index , int num){

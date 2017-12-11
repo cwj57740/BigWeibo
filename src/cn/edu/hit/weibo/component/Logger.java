@@ -12,7 +12,7 @@ import static cn.edu.hit.weibo.service.WeiboService.event.*;
  */
 public class Logger implements Observer {
     private WeiboService weiboService = new WeiboService();
-    Logger(Observable o){
+    public Logger(Observable o){
         o.addObserver(this);
         if(o instanceof WeiboService) {
             weiboService = (WeiboService) o;
@@ -21,18 +21,22 @@ public class Logger implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        if(o.hasChanged()){
-            String message = weiboService.getBlog().getBid()+".";
-            if (Add.equals(arg)){
-                message += "新增微博";
-            }
-            if (Update.equals(arg)){
-                message += "更新微博";
-            }
-            if (Delete.equals(arg)){
-                message += "删除微博";
-            }
+        String message = weiboService.getBlog().getBid()+".";
+        WeiboService.event e = (WeiboService.event)arg;
+        System.out.println("------------"+e.toString());
+        if (Add.toString().equals(e.toString())){
+            message += "新增微博";
             Producer.sendMessage(message, "First Queue");
         }
+        if (Update.toString().equals(e.toString())){
+            message += "更新微博";
+            Producer.sendMessage(message, "First Queue");
+        }
+        if (Delete.toString().equals(e.toString())){
+            message += "删除微博";
+            Producer.sendMessage(message, "First Queue");
+        }
+
+
     }
 }

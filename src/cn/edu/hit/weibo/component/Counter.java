@@ -18,7 +18,7 @@ public class Counter implements Observer {
     private WeiboService weiboService;
     private BlogDao blogDao = new BlogDao();
     private UserDao userDao = new UserDao();
-    Counter(Observable o){
+    public Counter(Observable o){
         o.addObserver(this);
         if(o instanceof WeiboService) {
             weiboService = (WeiboService) o;
@@ -27,13 +27,20 @@ public class Counter implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        if(o.hasChanged()){
-            if(Read.equals(arg)){
-                Blog blog = ((WeiboService) o).getBlog();
-                blogDao.addViews(blog);
-                User user = userDao.getUserById(blog.getUid());
-                userDao.addHits(user);
+        WeiboService.event e = null;
+        if(arg instanceof WeiboService.event){
+            e = (WeiboService.event)arg;
+        }
+        if(e!=null){
+            if(o.hasChanged()){
+                if(Read.toString().equals(e.toString())){
+                    Blog blog = ((WeiboService) o).getBlog();
+                    blogDao.addViews(blog);
+                    User user = userDao.getUserById(blog.getUid());
+                    userDao.addHits(user);
+                }
             }
         }
+
     }
 }

@@ -63,6 +63,7 @@ public class WeiboService extends Observable {
     }
 
     public boolean updateBlog(Blog blog){
+        this.blog = blog;
         boolean b = blogDao.updateBlog(blog);
         this.setChanged();
         this.notifyObservers(event.Update);
@@ -87,6 +88,5 @@ public class WeiboService extends Observable {
     public List<Blog> getUserBlogList(User user,int index,int num){
         return blogDao.getBlogListByUser(user,index,num);
     }
-
 
 }

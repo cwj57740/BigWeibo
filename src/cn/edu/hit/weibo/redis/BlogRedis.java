@@ -42,8 +42,7 @@ public class BlogRedis {
         try{
             jedis=jedisPool.getResource(); // 获取连接
 
-            for (int i=0;i<blogList.size();i++){
-                Blog blog = blogList.get(i);
+            for (Blog blog:blogList){
                 long dt = blog.getDatetime().getTime();
 
                 blogmap.put("uid",Integer.toString(blog.getUid()));
@@ -123,8 +122,7 @@ public class BlogRedis {
         Map<String, String> blogmap = new HashMap<String, String>();
         try{
             jedis=jedisPool.getResource(); // 获取连接
-            for (int i=0;i<blogList.size();i++){
-                Blog blog = blogList.get(i);
+            for (Blog blog:blogList){
 
                 jedis.del(Integer.toString(blog.getBid()));//删除原有键
                 //重新设置键值
