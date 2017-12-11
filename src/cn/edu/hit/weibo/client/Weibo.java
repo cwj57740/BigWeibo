@@ -54,6 +54,9 @@ public class Weibo {
         Scanner scanner = new Scanner(System.in);
         System.out.println("请输入微博的起始序号：");
         int index = scanner.nextInt()-1;
+        if (index == -1){
+            index = 0;
+        }
         System.out.println("请输入要显示的条数：");
         int num = scanner.nextInt();
         List<Blog> blogList = weiboService.getUserBlogList(user,index,num);
@@ -67,6 +70,9 @@ public class Weibo {
         do {
             System.out.println("请输入微博的起始序号：");
             int index = scanner.nextInt()-1;
+            if (index == -1){
+                index = 0;
+            }
             System.out.println("请输入要显示的条数：");
             int num = scanner.nextInt();
             List<Blog> blogList = weiboService.getAllBlogList(index,num);

@@ -6,10 +6,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BlogRedis {
 
@@ -182,7 +179,6 @@ public class BlogRedis {
 
     //删除微博单条记录
     public void deleteSingle(Blog blog){
-        Map<String, String> blogmap = new HashMap<String, String>();
         try{
             jedis=jedisPool.getResource(); // 获取连接
 
@@ -198,6 +194,33 @@ public class BlogRedis {
                 jedisPool.close();
             }
         }
+    }
+
+    //获取缓存中所有微博，如果没有微博返回null
+    public List<Blog> getAllWeibo(){
+        List<Blog> blogList = null;
+        Blog blog = new Blog();
+        Set<String> keySet = jedis.keys("*");
+        Iterator iter = keySet.iterator();
+
+        while (iter.hasNext()){
+            String key = (String)iter.next();
+            int bid = Integer.parseInt(key);
+            List<String> rsmap = jedis.hmget(key, "uid","title","text","views","isDeleted","datetime");
+            if(rsmap.isEmpty()){
+                Long dt = Long.parseLong(rsmap.get(5));
+                Date time = new Date(dt);
+                blog.setBid(bid);
+                blog.setUid(Integer.parseInt(rsmap.get(0)));
+                blog.setTitle(rsmap.get(1));
+                blog.setText(rsmap.get(2));
+                blog.setViews(Integer.parseInt(rsmap.get(3)));
+                blog.setIsDeleted(Integer.parseInt(rsmap.get(4)));
+                blog.setDatetime(time);
+                blogList.add(blog);
+            }
+        }
+        return blogList;
     }
 
 }
