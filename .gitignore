@@ -3,3 +3,4 @@
 *.iml
 out
 gen
+resource/c3p0-config.xml

@@ -137,4 +137,27 @@ public class Weibo {
         }
 
     }
+
+    //修改单条微博
+    public void modifySingleWeibo(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("请输入要修改的微博的主键号");
+        int bid = scanner.nextInt();
+        if (bid != -1){
+            Blog blog = weiboService.readBlog(bid);
+            if (blog !=null){
+                System.out.println("请输入该条微博的新标题");
+                String title = scanner.next();
+                System.out.println("请输入该条微博的新内容");
+                String text = scanner.next();
+                blog.setTitle(title);
+                blog.setText(text);
+                weiboService.updateBlog(blog);
+                System.out.println("修改成功");
+            }else {
+                System.out.println("找不到要修改的微博");
+            }
+        }
+
+    }
 }

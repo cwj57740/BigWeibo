@@ -32,14 +32,13 @@ public class Counter implements Observer {
             e = (WeiboService.event)arg;
         }
         if(e!=null){
-            if(o.hasChanged()){
-                if(Read.toString().equals(e.toString())){
-                    Blog blog = weiboService.getBlog();
-                    blogDao.addViews(blog);
-                    User user = userDao.getUserById(blog.getUid());
-                    userDao.addHits(user);
-                }
+            if(Read.toString().equals(e.toString())){
+                Blog blog = weiboService.getBlog();
+                blogDao.addViews(blog);
+                User user = userDao.getUserById(blog.getUid());
+                userDao.addHits(user);
             }
+
         }
 
     }

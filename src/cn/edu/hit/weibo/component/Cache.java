@@ -24,15 +24,16 @@ public class Cache implements Observer{
     }
     @Override
     public void update(Observable o, Object arg) {
-        if(o.hasChanged()){
-            Blog blog = weiboService.getBlog();
-            if(Update.equals(arg)){
-                blogRedis.updateSingle(blog);
-            }
-            if(Delete.equals(arg)){
-                blogRedis.deleteSingle(blog);
-            }
+
+        Blog blog = weiboService.getBlog();
+        WeiboService.event e = (WeiboService.event)arg;
+        if(Update.toString().equals(e.toString())){
+            blogRedis.updateSingle(blog);
         }
+        if(Delete.toString().equals(e.toString())){
+            blogRedis.deleteSingle(blog);
+        }
+
 
     }
 }
