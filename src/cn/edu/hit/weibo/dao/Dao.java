@@ -4,6 +4,7 @@ import cn.edu.hit.weibo.util.JdbcUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -24,6 +25,17 @@ public class Dao<T> {
             return false;
         }
     }
+    public int addT(String sql,Object ... params){
+        try {
+            QueryRunner qr = new QueryRunner(JdbcUtils.getDataSource());
+            Long id =  (Long) qr.insert(sql, new ScalarHandler<Long>(), params);
+            return id.intValue();
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
 
     public T getTByParams(String sql,Object ... params){
         QueryRunner qr = new QueryRunner(JdbcUtils.getDataSource());

@@ -44,11 +44,17 @@ public class WeiboService extends Observable {
         this.blog = blog;
     }
     public boolean addBlog(Blog blog){
-        this.blog = blog;
-        boolean b = blogDao.addBlog(blog);
-        this.setChanged();
-        this.notifyObservers(event.Add);
-        return b;
+        try {
+            int bid = blogDao.addBlog(blog);
+            this.blog = blog;
+            this.blog.setBid(bid);
+            this.setChanged();
+            this.notifyObservers(event.Add);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public Blog readBlog(int bid){

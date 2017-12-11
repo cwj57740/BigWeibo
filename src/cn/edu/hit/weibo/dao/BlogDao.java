@@ -9,9 +9,9 @@ import java.util.List;
 
 public class BlogDao {
     private Dao<Blog> dao = new Dao<>(Blog.class);
-    public boolean addBlog(Blog blog){
+    public int addBlog(Blog blog){
         String sql = "insert into blog (uid, title, text, datetime) values (?, ?, ?, ?)";
-        return dao.updateT(sql,blog.getUid(),blog.getTitle(),blog.getText(),new Timestamp(System.currentTimeMillis()));
+        return dao.addT(sql,blog.getUid(),blog.getTitle(),blog.getText(),new Timestamp(System.currentTimeMillis()));
     }
     public boolean updateBlog(Blog blog){
         String sql = "update blog set title = ?, text = ? where bid = ?";
@@ -39,14 +39,14 @@ public class BlogDao {
         String userSql = "select * from user order by hits limit 100";
         List<User> userList = new Dao<User>(User.class).getTListByParams(userSql);
         for(User user:userList){
-            String sql = "select * from blog where uid = ? order by datetime limit 100";
+            String sql = "select * from blog where isDeleted = 0 and uid = ? order by datetime limit 100";
             List<Blog> blogListByUser= dao.getTListByParams(sql, user.getUid());
             blogList.addAll(blogListByUser);
         }
         return blogList;
     }
     public List<Blog> getBlogListByUser(User user, int index , int num){
-        String sql = "select * from blog where uid = ? order by datetime desc limit ?, ?";
+        String sql = "select * from blog where isDeleted = 0 and uid = ? order by datetime desc limit ?, ?";
         return dao.getTListByParams(sql,user.getUid(),index,num);
     }
 
