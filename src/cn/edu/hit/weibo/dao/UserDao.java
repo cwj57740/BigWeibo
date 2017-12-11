@@ -55,7 +55,7 @@ public class UserDao {
      */
     public User getUserById(int id){
         String sql = "select * from user where uid = ?";
-        return (User)dao.getTByParams(sql,id);
+        return dao.getTByParams(sql,id);
     }
 
     /**

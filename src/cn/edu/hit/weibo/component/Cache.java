@@ -15,7 +15,6 @@ import static cn.edu.hit.weibo.service.WeiboService.event.Update;
 public class Cache implements Observer{
     private WeiboService weiboService = new WeiboService();
     private BlogRedis blogRedis = new BlogRedis();
-    private List<Blog> blogList;
     public Cache(Observable o){
         o.addObserver(this);
         if(o instanceof WeiboService) {

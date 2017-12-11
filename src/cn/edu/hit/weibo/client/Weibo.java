@@ -112,7 +112,7 @@ public class Weibo {
             Blog blog = blogList.get(i);
             Date date = blog.getDatetime();
             String datetime = sdf.format(date);
-            System.out.println(i+":    "+blog.getBid()+"    "+blog.getTitle()+"    "+blog.getViews()+"    "+datetime);
+            System.out.println((i+1)+":    "+blog.getBid()+"    "+blog.getTitle()+"    "+blog.getViews()+"    "+datetime);
         }
     }
 

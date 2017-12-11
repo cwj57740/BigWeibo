@@ -63,7 +63,7 @@ public class Consumer {
             // 得到消息生成者【发送者】
             consumer = session.createConsumer(destination);
             while (true) {
-                System.out.println("----开始接受日志消息----");
+                System.out.println("----等待日志消息----");
                 //设置接收者接收消息的时间
                 TextMessage message = (TextMessage) consumer.receive(100000);
                 if (null != message) {

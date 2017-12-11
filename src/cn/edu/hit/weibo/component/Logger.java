@@ -23,7 +23,6 @@ public class Logger implements Observer {
     public void update(Observable o, Object arg) {
         String message = weiboService.getBlog().getBid()+".";
         WeiboService.event e = (WeiboService.event)arg;
-        System.out.println("------------"+e.toString());
         if (Add.toString().equals(e.toString())){
             message += "新增微博";
             Producer.sendMessage(message, "First Queue");
