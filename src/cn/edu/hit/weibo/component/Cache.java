@@ -16,7 +16,7 @@ public class Cache implements Observer{
     private WeiboService weiboService = new WeiboService();
     private BlogRedis blogRedis = new BlogRedis();
     private List<Blog> blogList;
-    Cache(Observable o){
+    public Cache(Observable o){
         o.addObserver(this);
         if(o instanceof WeiboService) {
             weiboService = (WeiboService) o;

@@ -34,7 +34,7 @@ public class Counter implements Observer {
         if(e!=null){
             if(o.hasChanged()){
                 if(Read.toString().equals(e.toString())){
-                    Blog blog = ((WeiboService) o).getBlog();
+                    Blog blog = weiboService.getBlog();
                     blogDao.addViews(blog);
                     User user = userDao.getUserById(blog.getUid());
                     userDao.addHits(user);

@@ -1,9 +1,11 @@
 package cn.edu.hit.weibo.client;
 
+import cn.edu.hit.weibo.component.Cache;
 import cn.edu.hit.weibo.component.Counter;
 import cn.edu.hit.weibo.component.Logger;
 import cn.edu.hit.weibo.model.Blog;
 import cn.edu.hit.weibo.model.User;
+import cn.edu.hit.weibo.redis.BlogRedis;
 import cn.edu.hit.weibo.service.WeiboService;
 
 import java.text.SimpleDateFormat;
@@ -13,8 +15,10 @@ import java.util.Scanner;
 
 public class Weibo {
     private WeiboService weiboService = new WeiboService();
+    private BlogRedis blogRedis = new BlogRedis();
     private Logger logger = new Logger(weiboService);
     private Counter counter = new Counter(weiboService);
+    private Cache cache = new Cache(weiboService);
 
     //添加微博
     public void addWeibo(User user){
@@ -70,7 +74,7 @@ public class Weibo {
         do {
             System.out.println("请输入微博的起始序号：");
             int index = scanner.nextInt()-1;
-            if (index == -1){
+            if (index < 0){
                 index = 0;
             }
             System.out.println("请输入要显示的条数：");
@@ -84,19 +88,28 @@ public class Weibo {
     }
 
     public void getHotWeibo(){
-
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("请输入微博的起始序号：");
+        int index = scanner.nextInt()-1;
+        if (index < 0){
+            index = 0;
+        }
+        System.out.println("请输入要显示的条数：");
+        int num = scanner.nextInt();
+        List<Blog> blogList = blogRedis.getAllWeibo();
+        List<Blog> subList = blogList.subList(index, index + num);
+        printWeiboList(subList);
     }
 
     //打印微博列表
     private void printWeiboList(List<Blog> blogList){
-        System.out.println("主键    标题    点击量    创建时间");
+        System.out.println("序号    主键    标题    点击量    创建时间");
         for (int i=0;i<blogList.size();i++){
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Blog blog = blogList.get(i);
             Date date = blog.getDatetime();
             String datetime = sdf.format(date);
-            int isDeleted = blog.getIsDeleted();
-            System.out.println(blog.getBid()+"    "+blog.getTitle()+"    "+blog.getViews()+"    "+datetime);
+            System.out.println(i+":    "+blog.getBid()+"    "+blog.getTitle()+"    "+blog.getViews()+"    "+datetime);
         }
     }
 
