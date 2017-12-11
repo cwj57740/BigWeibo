@@ -199,15 +199,14 @@ public class BlogRedis {
     //获取缓存中所有微博，如果没有微博返回null
     public List<Blog> getAllWeibo(){
         List<Blog> blogList = new ArrayList<>();
-        Blog blog = new Blog();
         Set<String> keySet = jedis.keys("*");
         Iterator iter = keySet.iterator();
-
         while (iter.hasNext()){
             String key = (String)iter.next();
             int bid = Integer.parseInt(key);
             List<String> rsmap = jedis.hmget(key, "uid","title","text","views","isDeleted","datetime");
             if(!rsmap.isEmpty()){
+                Blog blog = new Blog();
                 Long dt = Long.parseLong(rsmap.get(5));
                 Date time = new Date(dt);
                 blog.setBid(bid);

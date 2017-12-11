@@ -14,7 +14,7 @@ public class Main {
         Weibo weibo = new Weibo();
         BlogDao blogDao = new BlogDao();
         BlogRedis blogRedis = new BlogRedis();
-        blogRedis.saveBlog(blogDao.getHotBlogList());
+        blogRedis.updateRedis(blogDao.getHotBlogList());
         Scanner scanner = new Scanner(System.in);
 
         do {
@@ -31,7 +31,7 @@ public class Main {
         }while (user == null);
         int flag = 0;
         do{
-            System.out.println("选择要查看的微博：1.最近的微博；2.自己的微博；3.最新的微博");
+            System.out.println("选择要查看的微博：1.最近的微博；2.自己的微博；3.最新的热门微博");
             int whos = scanner.nextInt();
             switch (whos){
                 case 1:
@@ -45,10 +45,8 @@ public class Main {
                         int opweibo = scanner.nextInt();
                         if (opweibo == 1){
                             weibo.addWeibo(user);
-                            weibo.getWeibolist(user);
                         }else if (opweibo == 2){
                             weibo.deleteWeibo();
-                            weibo.getWeibolist(user);
                         }else if (opweibo == 3){
                             weibo.showSingleWeibo();
                         } else {

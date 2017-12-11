@@ -42,7 +42,7 @@ public class Weibo {
     //删除微博
     public void deleteWeibo(){
         Scanner scanner = new Scanner(System.in);
-        System.out.println("请输入要删除的微博的序号：");
+        System.out.println("请输入要删除的微博的主键：");
         int bid = scanner.nextInt();
 
         boolean b = weiboService.deleteBlog(bid);
@@ -97,6 +97,9 @@ public class Weibo {
         System.out.println("请输入要显示的条数：");
         int num = scanner.nextInt();
         List<Blog> blogList = blogRedis.getAllWeibo();
+        if(num>blogList.size()){
+            num = blogList.size();
+        }
         List<Blog> subList = blogList.subList(index, index + num);
         printWeiboList(subList);
     }
